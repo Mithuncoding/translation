@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ultimate TTS, SST & Translation App</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet"/>
   <style>
     /* Base & Background */
     body {
@@ -141,16 +141,9 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    /* Unified Searchable Language Input using datalist */
-    .lang-dropdown {
-      position: relative;
-      display: inline-block;
-      width: 200px;
-    }
-    .lang-dropdown input {
-      width: 100%;
+    select, option {
+      font-size: 1em;
       padding: 5px;
-      border: 1px solid #ccc;
       border-radius: 3px;
     }
     /* History Section Enhancements */
@@ -253,9 +246,10 @@
   </header>
   <nav>
     <ul>
-      <li><button id="tab-tts" class="active">TTS</button></li>
-      <li><button id="tab-sst">SST</button></li>
+      <li><button id="tab-tts" class="active">Text to Speech (TTS)</button></li>
+      <li><button id="tab-sst">Speech to Text (SST)</button></li>
       <li><button id="tab-history">History</button></li>
+      <li><button id="tab-about">Help / About</button></li>
     </ul>
   </nav>
   <main>
@@ -266,22 +260,22 @@
       <div class="controls">
         <button id="speak-btn" class="btn btn-primary">Speak</button>
         <button id="stop-btn" class="btn btn-danger">Stop</button>
-        <!-- Unified Voice Dropdown -->
-        <div class="lang-dropdown">
-          <input type="text" id="voice-input" placeholder="Select voice" list="voice-datalist" />
-          <datalist id="voice-datalist"></datalist>
+        <!-- Voice Selection -->
+        <div class="control-group">
+          <label for="voiceSelect">Voice:</label>
+          <select id="voiceSelect"></select>
         </div>
         <div class="control-group">
           <label for="rate">Rate: <span id="rate-value">1</span></label>
-          <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1" />
+          <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1"/>
         </div>
         <div class="control-group">
           <label for="pitch">Pitch: <span id="pitch-value">1</span></label>
-          <input type="range" id="pitch" min="0" max="2" value="1" step="0.1" />
+          <input type="range" id="pitch" min="0" max="2" value="1" step="0.1"/>
         </div>
         <div class="control-group">
           <label for="volume">Volume: <span id="volume-value">1</span></label>
-          <input type="range" id="volume" min="0" max="1" value="1" step="0.1" />
+          <input type="range" id="volume" min="0" max="1" value="1" step="0.1"/>
         </div>
         <button id="copy-btn" class="btn btn-secondary">Copy</button>
         <button id="paste-btn" class="btn btn-secondary">Paste</button>
@@ -291,15 +285,13 @@
       <div class="translation-group">
         <h2>Translate TTS Text</h2>
         <div class="controls">
-          <!-- Source Language (e.g., EN) -->
-          <div class="lang-dropdown">
-            <input type="text" id="tts-src-input" placeholder="From (e.g., EN)" list="tts-src-datalist" />
-            <datalist id="tts-src-datalist"></datalist>
+          <div class="control-group">
+            <label for="tts-source-lang">From:</label>
+            <select id="tts-source-lang"></select>
           </div>
-          <!-- Target Language (e.g., IT) -->
-          <div class="lang-dropdown">
-            <input type="text" id="tts-tgt-input" placeholder="To (e.g., IT)" list="tts-tgt-datalist" />
-            <datalist id="tts-tgt-datalist"></datalist>
+          <div class="control-group">
+            <label for="tts-target-lang">To:</label>
+            <select id="tts-target-lang"></select>
           </div>
           <button id="translate-tts-btn" class="btn btn-primary">Translate</button>
         </div>
@@ -310,12 +302,11 @@
     
     <!-- SST Section -->
     <section id="sst-section">
-      <h2>Speech-to-Text (SST)</h2>
+      <h2>Speech to Text (SST)</h2>
       <div class="controls">
-        <!-- Recognition Language Dropdown (e.g., KN for Kannada) -->
-        <div class="lang-dropdown">
-          <input type="text" id="recog-input" placeholder="Recognition language (e.g., KN)" list="recog-datalist" />
-          <datalist id="recog-datalist"></datalist>
+        <div class="control-group">
+          <label for="recognition-lang">Recognition Lang:</label>
+          <select id="recognition-lang"></select>
         </div>
         <button id="start-btn" class="btn btn-primary">Start Recognition</button>
         <button id="stop-rec-btn" class="btn btn-danger">Stop Recognition</button>
@@ -328,15 +319,13 @@
       <div class="translation-group">
         <h2>Translate SST Text</h2>
         <div class="controls">
-          <!-- Source Language (e.g., EN) -->
-          <div class="lang-dropdown">
-            <input type="text" id="sst-src-input" placeholder="From (e.g., EN)" list="sst-src-datalist" />
-            <datalist id="sst-src-datalist"></datalist>
+          <div class="control-group">
+            <label for="sst-source-lang">From:</label>
+            <select id="sst-source-lang"></select>
           </div>
-          <!-- Target Language (e.g., IT) -->
-          <div class="lang-dropdown">
-            <input type="text" id="sst-tgt-input" placeholder="To (e.g., IT)" list="sst-tgt-datalist" />
-            <datalist id="sst-tgt-datalist"></datalist>
+          <div class="control-group">
+            <label for="sst-target-lang">To:</label>
+            <select id="sst-target-lang"></select>
           </div>
           <button id="translate-sst-btn" class="btn btn-primary">Translate</button>
         </div>
@@ -349,7 +338,7 @@
     <section id="history-section">
       <h2>History</h2>
       <div id="history-controls">
-        <input type="text" id="history-search" placeholder="Search history..." />
+        <input type="text" id="history-search" placeholder="Search history..."/>
         <button id="download-history" class="btn btn-secondary">Download History</button>
         <button id="clear-all-history" class="btn btn-danger">Clear All History</button>
       </div>
@@ -364,19 +353,36 @@
         <button id="clear-sst-history" class="btn btn-danger">Clear SST History</button>
       </div>
     </section>
+    
+    <!-- About / Help Section -->
+    <section id="about-section">
+      <h2>Help / About</h2>
+      <p>
+        <strong>Welcome!</strong> This app provides Text to Speech (TTS), Speech to Text (SST), and translation features in one place. 
+      </p>
+      <ul>
+        <li><strong>On Mobile:</strong> Select a voice and language from the dropdown menus. Tap “Start Recognition” to begin speech input, or type text for TTS. Use “Speak” to hear your typed text. If you have trouble finding a local voice for an Indian language, we automatically use a fallback TTS service.</li>
+        <li><strong>On Windows:</strong> Use Chrome or Edge for best results. Choose a voice from the “Voice” dropdown (some systems have many voices). If the selected voice doesn’t support your chosen language, we’ll fetch audio from Google’s TTS for that language.</li>
+        <li><strong>History:</strong> All TTS and SST entries are stored locally. You can search, download (as JSON), or clear them.</li>
+        <li><strong>Settings (gear icon):</strong> Toggle Dark Mode, adjust font size, or pick a new font family. Your preferences are saved automatically.</li>
+      </ul>
+      <p>
+        Enjoy exploring different languages (including Indian languages like Tamil, Telugu, Kannada). If a matching local voice doesn’t exist, we use an online fallback TTS, so you can still hear the text. Also note that translations come from MyMemory’s API, which may have some limitations or errors for certain language pairs.
+      </p>
+    </section>
   </main>
   
-  <!-- Settings Button & Modal (Fixed at Bottom Left) -->
+  <!-- Settings Button & Modal -->
   <button id="settings-btn" title="Settings">⚙️</button>
   <div id="settings-modal">
     <h3>Settings</h3>
     <div class="control-group">
       <label for="dark-mode-toggle">Dark Mode:</label>
-      <input type="checkbox" id="dark-mode-toggle" />
+      <input type="checkbox" id="dark-mode-toggle"/>
     </div>
     <div class="control-group">
       <label for="font-size-input">Font Size:</label>
-      <input type="range" id="font-size-input" min="12" max="32" value="16" />
+      <input type="range" id="font-size-input" min="12" max="32" value="16"/>
       <span id="font-size-display">16px</span>
     </div>
     <div class="control-group">
@@ -396,8 +402,8 @@
   </footer>
   
   <script>
-    /********** Language Data & Utilities **********/
-    const languages = [
+    /********** Full 100+ Language List for Translation & Recognition **********/
+    const fullLanguages = [
       { code: 'af', name: 'Afrikaans' },
       { code: 'sq', name: 'Albanian' },
       { code: 'am', name: 'Amharic' },
@@ -411,14 +417,13 @@
       { code: 'bg', name: 'Bulgarian' },
       { code: 'ca', name: 'Catalan' },
       { code: 'ceb', name: 'Cebuano' },
-      { code: 'zh-CN', name: 'Chinese (Simplified)' },
-      { code: 'zh-TW', name: 'Chinese (Traditional)' },
+      { code: 'zh', name: 'Chinese' },
       { code: 'co', name: 'Corsican' },
       { code: 'hr', name: 'Croatian' },
       { code: 'cs', name: 'Czech' },
       { code: 'da', name: 'Danish' },
       { code: 'nl', name: 'Dutch' },
-      { code: 'en', name: 'English', recog: 'en-US' },
+      { code: 'en', name: 'English' },
       { code: 'eo', name: 'Esperanto' },
       { code: 'et', name: 'Estonian' },
       { code: 'fi', name: 'Finnish' },
@@ -443,7 +448,7 @@
       { code: 'it', name: 'Italian' },
       { code: 'ja', name: 'Japanese' },
       { code: 'jw', name: 'Javanese' },
-      { code: 'kn', name: 'Kannada', recog: 'kn-IN' },
+      { code: 'kn', name: 'Kannada' },
       { code: 'kk', name: 'Kazakh' },
       { code: 'km', name: 'Khmer' },
       { code: 'ko', name: 'Korean' },
@@ -505,53 +510,62 @@
       { code: 'zu', name: 'Zulu' }
     ];
     
-    // Populate datalists for input fields
-    function populateDatalist(inputId, datalistId) {
-      const datalist = document.getElementById(datalistId);
-      datalist.innerHTML = '';
-      languages.forEach(lang => {
-        if(lang.code === "auto") return;
-        const option = document.createElement('option');
-        option.value = `${lang.name}|${lang.code}`;
-        datalist.appendChild(option);
+    // We'll populate TTS Source, TTS Target, SST Source, SST Target, and recognition <select> from this big list
+    const ttsSourceLang = document.getElementById('tts-source-lang');
+    const ttsTargetLang = document.getElementById('tts-target-lang');
+    const sstSourceLang = document.getElementById('sst-source-lang');
+    const sstTargetLang = document.getElementById('sst-target-lang');
+    const recognitionLang = document.getElementById('recognition-lang');
+    
+    function populateLanguageSelectFull(selectElem, defaultCode) {
+      selectElem.innerHTML = '';
+      fullLanguages.forEach(lang => {
+        const opt = document.createElement('option');
+        opt.value = lang.code;
+        opt.textContent = lang.name;
+        if(lang.code===defaultCode) opt.selected = true;
+        selectElem.appendChild(opt);
       });
     }
-    populateDatalist('tts-src-input', 'tts-src-datalist');
-    populateDatalist('tts-tgt-input', 'tts-tgt-datalist');
-    populateDatalist('sst-src-input', 'sst-src-datalist');
-    populateDatalist('sst-tgt-input', 'sst-tgt-datalist');
-    populateDatalist('recog-input', 'recog-datalist');
+    // TTS default: from English to Tamil
+    populateLanguageSelectFull(ttsSourceLang, 'en');
+    populateLanguageSelectFull(ttsTargetLang, 'ta');
+    // SST default: from English to Tamil
+    populateLanguageSelectFull(sstSourceLang, 'en');
+    populateLanguageSelectFull(sstTargetLang, 'ta');
+    // recognition default: English
+    populateLanguageSelectFull(recognitionLang, 'en');
     
-    // Extract the language code from an input's value "Name|code"
-    function getLangCode(inputElem) {
-      const val = inputElem.value;
-      if(!val.includes("|")) return "";
-      return val.split("|")[1].trim();
-    }
+    /****************************************************
+     * The rest of the code is the same as the snippet
+     * we had before. We won't remove anything, just
+     * keep the logic for fallback TTS, MyMemory translation,
+     * local voice usage, history, settings, etc.
+     ****************************************************/
     
-    /********** Local & Fallback TTS Logic **********/
-    let synth = window.speechSynthesis;
+    /* ---------- The rest of the code continues below ---------- */
+    
+    const synth = window.speechSynthesis;
     let voices = [];
     
     function populateVoices() {
       voices = synth.getVoices();
-      const datalist = document.getElementById('voice-datalist');
-      datalist.innerHTML = '';
+      const voiceSelectEl = document.getElementById('voiceSelect');
+      voiceSelectEl.innerHTML = '';
       voices.forEach((voice, index) => {
-        const option = document.createElement('option');
-        option.value = `${voice.name} (${voice.lang})|${index}`;
-        datalist.appendChild(option);
+        const opt = document.createElement('option');
+        opt.value = index;
+        opt.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelectEl.appendChild(opt);
       });
     }
     populateVoices();
-    if (speechSynthesis.onvoiceschanged !== undefined) {
+    if(speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = populateVoices;
     }
     
     // Fallback TTS with Google Translate
     async function fallbackSpeak(text, lang) {
-      // Example: "ta" for Tamil, "te" for Telugu, "kn" for Kannada, etc.
-      // This is an unofficial usage of Google TTS.
       const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang}&q=${encodeURIComponent(text)}`;
       const audio = new Audio(ttsUrl);
       try {
@@ -562,49 +576,43 @@
       }
     }
     
-    // First try to find a local voice that starts or includes the target code
-    function getVoiceForLanguage(langCode) {
-      if (!langCode) return null;
+    function getLocalVoiceByLang(langCode) {
+      if(!langCode) return null;
       langCode = langCode.toLowerCase();
-      // 1) exact startsWith
-      for (let i = 0; i < voices.length; i++) {
-        if (voices[i].lang.toLowerCase().startsWith(langCode)) {
-          return voices[i];
-        }
+      // exact startsWith
+      for(let v of voices) {
+        if(v.lang.toLowerCase().startsWith(langCode)) return v;
       }
-      // 2) partial includes
-      for (let i = 0; i < voices.length; i++) {
-        if (voices[i].lang.toLowerCase().includes(langCode)) {
-          return voices[i];
-        }
+      // partial includes
+      for(let v of voices) {
+        if(v.lang.toLowerCase().includes(langCode)) return v;
       }
       return null;
     }
     
-    // A universal function to speak any text in any language, 
-    // using local voice if available, else fallback TTS
     function speakAnyLanguage(text, langCode, rateVal, pitchVal, volumeVal) {
-      if (!text.trim()) return;
-      const chosenVoice = getVoiceForLanguage(langCode);
-      if (!chosenVoice) {
-        // fallback
+      if(!text.trim()) return;
+      const localVoice = getLocalVoiceByLang(langCode);
+      if(!localVoice) {
         fallbackSpeak(text, langCode);
       } else {
-        // local speechSynthesis
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.voice = chosenVoice;
-        utterance.rate = rateVal;
-        utterance.pitch = pitchVal;
-        utterance.volume = volumeVal;
-        synth.speak(utterance);
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.voice = localVoice;
+        utt.rate = rateVal;
+        utt.pitch = pitchVal;
+        utt.volume = volumeVal;
+        synth.speak(utt);
       }
     }
     
-    /********** TTS Section **********/
+    // TTS
     const ttsText = document.getElementById('tts-text');
     const speakBtn = document.getElementById('speak-btn');
     const stopBtn = document.getElementById('stop-btn');
-    const voiceInput = document.getElementById('voice-input');
+    const copyBtn = document.getElementById('copy-btn');
+    const pasteBtn = document.getElementById('paste-btn');
+    const voiceSelectEl = document.getElementById('voiceSelect');
+    
     const rate = document.getElementById('rate');
     const pitch = document.getElementById('pitch');
     const volume = document.getElementById('volume');
@@ -613,83 +621,76 @@
     const volumeValue = document.getElementById('volume-value');
     
     speakBtn.addEventListener('click', () => {
-      if (synth.speaking) return;
+      if(synth.speaking) return;
       const text = ttsText.value.trim();
-      if (!text) return;
+      if(!text) return;
       addHistory('tts', text);
-      // Determine the chosen voice from the dropdown
-      let voiceIndex = voiceInput.value.split("|")[1];
-      if (voiceIndex === undefined) voiceIndex = 0;
+      const voiceIndex = voiceSelectEl.value;
       const chosenVoice = voices[voiceIndex];
-      if (!chosenVoice) {
-        // fallback - we have no local voice selected
-        // let's guess the text is in English or let user do any language
-        fallbackSpeak(text, "en");
+      if(!chosenVoice) {
+        fallbackSpeak(text, 'en');
       } else {
-        // speak with local voice
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.voice = chosenVoice;
-        utterance.rate = rate.value;
-        utterance.pitch = pitch.value;
-        utterance.volume = volume.value;
-        synth.speak(utterance);
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.voice = chosenVoice;
+        utt.rate = rate.value;
+        utt.pitch = pitch.value;
+        utt.volume = volume.value;
+        synth.speak(utt);
       }
     });
-    
     stopBtn.addEventListener('click', () => {
-      if (synth.speaking) synth.cancel();
+      if(synth.speaking) synth.cancel();
     });
-    rate.addEventListener('input', () => { rateValue.textContent = rate.value; });
-    pitch.addEventListener('input', () => { pitchValue.textContent = pitch.value; });
-    volume.addEventListener('input', () => { volumeValue.textContent = volume.value; });
-    
-    document.getElementById('copy-btn').addEventListener('click', () => {
+    copyBtn.addEventListener('click', () => {
       ttsText.select();
       document.execCommand('copy');
     });
-    document.getElementById('paste-btn').addEventListener('click', async () => {
+    pasteBtn.addEventListener('click', async() => {
       try {
         const text = await navigator.clipboard.readText();
         ttsText.value = text;
-      } catch (err) {
-        console.error('Clipboard error:', err);
+      } catch(e) {
+        console.error(e);
       }
     });
+    rate.addEventListener('input', ()=> rateValue.textContent = rate.value);
+    pitch.addEventListener('input', ()=> pitchValue.textContent = pitch.value);
+    volume.addEventListener('input', ()=> volumeValue.textContent = volume.value);
     
     // TTS Translation
     const translateTtsBtn = document.getElementById('translate-tts-btn');
     const ttsTranslatedText = document.getElementById('tts-translated-text');
     const speakTranslatedBtn = document.getElementById('speak-translated-btn');
-    const ttsSrcInput = document.getElementById('tts-src-input');
-    const ttsTgtInput = document.getElementById('tts-tgt-input');
+    const ttsSourceLangEl = document.getElementById('tts-source-lang');
+    const ttsTargetLangEl = document.getElementById('tts-target-lang');
     
     translateTtsBtn.addEventListener('click', () => {
       const text = ttsText.value.trim();
-      if (!text) { alert('Enter text to translate.'); return; }
-      let sourceCode = getLangCode(ttsSrcInput);
-      if (!sourceCode) sourceCode = "en";
-      const targetCode = getLangCode(ttsTgtInput) || "en";
-      ttsTranslatedText.value = "Translating...";
-      translateText(text, sourceCode, targetCode, (translated) => {
+      if(!text){ alert('Enter text to translate.'); return; }
+      const src = ttsSourceLangEl.value || 'en';
+      const tgt = ttsTargetLangEl.value || 'en';
+      ttsTranslatedText.value = 'Translating...';
+      translateText(text, src, tgt, translated => {
         ttsTranslatedText.value = translated;
       });
     });
-    
     speakTranslatedBtn.addEventListener('click', () => {
-      if (synth.speaking) return;
+      if(synth.speaking) return;
       const text = ttsTranslatedText.value.trim();
-      if (!text) return;
-      const targetCode = getLangCode(ttsTgtInput) || "en";
-      speakAnyLanguage(text, targetCode, rate.value, pitch.value, volume.value);
+      if(!text) return;
+      const tgt = ttsTargetLangEl.value || 'en';
+      speakAnyLanguage(text, tgt, rate.value, pitch.value, volume.value);
     });
     
-    /********** MyMemory Translation Function **********/
+    // MyMemory translation
     function translateText(text, source, target, callback) {
+      // Must be valid 2-letter or RFC3066 codes (like zh-CN)
+      // MyMemory: https://api.mymemory.translated.net/get?q=TEXT&langpair=src|tgt
       const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${target}`;
       fetch(url)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
-          if (data && data.responseData) {
+          if(data && data.responseData){
             callback(data.responseData.translatedText);
           } else {
             callback('Translation error.');
@@ -701,145 +702,133 @@
         });
     }
     
-    /********** SST Setup **********/
-    const sstText = document.getElementById('sst-text');
-    const startBtn = document.getElementById('start-btn');
-    const stopRecBtn = document.getElementById('stop-rec-btn');
-    const saveSstBtn = document.getElementById('save-sst-btn');
-    const clearBtn = document.getElementById('clear-btn');
+    // SST
+    const sstTextEl = document.getElementById('sst-text');
+    const startBtnEl = document.getElementById('start-btn');
+    const stopBtnEl = document.getElementById('stop-rec-btn');
+    const saveSstBtnEl = document.getElementById('save-sst-btn');
+    const clearBtnEl = document.getElementById('clear-btn');
     let recognition;
     let recognizing = false;
     
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert('Your browser does not support Speech Recognition.');
-    } else {
+    if(('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window)){
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
-      
-      recognition.onstart = () => { recognizing = true; };
-      recognition.onresult = (event) => {
+      recognition.onstart = ()=> { recognizing = true; };
+      recognition.onresult = evt => {
         let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
+        for(let i=evt.resultIndex; i<evt.results.length; i++){
+          transcript += evt.results[i][0].transcript;
         }
-        sstText.value = transcript;
+        sstTextEl.value = transcript;
       };
-      recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
+      recognition.onerror = evt => {
+        console.error('Speech recognition error:', evt.error);
       };
-      recognition.onend = () => { recognizing = false; };
+      recognition.onend = ()=> { recognizing = false; };
+    } else {
+      alert('Your browser does not support speech recognition. Please try Chrome.');
     }
     
-    startBtn.addEventListener('click', () => {
-      if (recognition && !recognizing) {
-        const recogCode = getLangCode(document.getElementById('recog-input')) || "en";
-        const recogMapping = { en: "en-US", kn: "kn-IN" };
-        recognition.lang = recogMapping[recogCode.toLowerCase()] || recogCode;
+    const recognitionLangEl = document.getElementById('recognition-lang');
+    startBtnEl.addEventListener('click', ()=>{
+      if(recognition && !recognizing){
+        recognition.lang = recognitionLangEl.value || 'en-US';
         recognition.start();
       }
     });
-    
-    stopRecBtn.addEventListener('click', () => {
-      if (recognition && recognizing) {
+    stopBtnEl.addEventListener('click', ()=>{
+      if(recognition && recognizing){
         recognition.stop();
       }
     });
-    clearBtn.addEventListener('click', () => { sstText.value = ''; });
-    
-    saveSstBtn.addEventListener('click', () => {
-      const text = sstText.value.trim();
-      if (!text) { alert('No transcript to save.'); return; }
+    saveSstBtnEl.addEventListener('click', ()=>{
+      const text = sstTextEl.value.trim();
+      if(!text){ alert('No transcript to save.'); return; }
       addHistory('sst', text);
       alert('Transcript saved.');
     });
+    clearBtnEl.addEventListener('click', ()=> sstTextEl.value='');
     
-    // SST Translation
-    const translateSstBtn = document.getElementById('translate-sst-btn');
-    const sstTranslatedText = document.getElementById('sst-translated-text');
-    const speakSstTranslatedBtn = document.getElementById('speak-sst-translated-btn');
-    const sstSrcInput = document.getElementById('sst-src-input');
-    const sstTgtInput = document.getElementById('sst-tgt-input');
+    // SST translation
+    const sstSourceLangEl = document.getElementById('sst-source-lang');
+    const sstTargetLangEl = document.getElementById('sst-target-lang');
+    const translateSstBtnEl = document.getElementById('translate-sst-btn');
+    const sstTranslatedTextEl = document.getElementById('sst-translated-text');
+    const speakSstTranslatedBtnEl = document.getElementById('speak-sst-translated-btn');
     
-    translateSstBtn.addEventListener('click', () => {
-      const text = sstText.value.trim();
-      if (!text) { alert('No transcript to translate.'); return; }
-      let sourceCode = getLangCode(sstSrcInput);
-      if (!sourceCode) sourceCode = "en";
-      const targetCode = getLangCode(sstTgtInput) || "en";
-      sstTranslatedText.value = "Translating...";
-      translateText(text, sourceCode, targetCode, (translated) => {
-        sstTranslatedText.value = translated;
+    translateSstBtnEl.addEventListener('click', ()=>{
+      const text = sstTextEl.value.trim();
+      if(!text){ alert('No transcript to translate.'); return; }
+      const src = sstSourceLangEl.value || 'en';
+      const tgt = sstTargetLangEl.value || 'en';
+      sstTranslatedTextEl.value = 'Translating...';
+      translateText(text, src, tgt, translated=>{
+        sstTranslatedTextEl.value = translated;
       });
     });
-    
-    speakSstTranslatedBtn.addEventListener('click', () => {
-      if (synth.speaking) return;
-      const text = sstTranslatedText.value.trim();
-      if (!text) return;
-      const targetCode = getLangCode(sstTgtInput) || "en";
-      speakAnyLanguage(text, targetCode, rate.value, pitch.value, volume.value);
+    speakSstTranslatedBtnEl.addEventListener('click', ()=>{
+      if(synth.speaking) return;
+      const text = sstTranslatedTextEl.value.trim();
+      if(!text) return;
+      const tgt = sstTargetLangEl.value || 'en';
+      speakAnyLanguage(text, tgt, rate.value, pitch.value, volume.value);
     });
     
-    /********** History Functions **********/
-    function addHistory(type, text) {
-      const key = type === 'tts' ? 'ttsHistory' : 'sstHistory';
-      let history = JSON.parse(localStorage.getItem(key)) || [];
-      history.push({ text: text, timestamp: new Date().toLocaleString() });
-      localStorage.setItem(key, JSON.stringify(history));
+    // History
+    function addHistory(type, text){
+      const key = type==='tts'? 'ttsHistory':'sstHistory';
+      let hist = JSON.parse(localStorage.getItem(key))||[];
+      hist.push({ text, timestamp: new Date().toLocaleString() });
+      localStorage.setItem(key, JSON.stringify(hist));
       updateHistory();
     }
-    
-    function updateHistory() {
-      const ttsHistoryList = document.getElementById('tts-history-list');
-      const sstHistoryList = document.getElementById('sst-history-list');
-      ttsHistoryList.innerHTML = '';
-      sstHistoryList.innerHTML = '';
-      
-      let ttsHistory = JSON.parse(localStorage.getItem('ttsHistory')) || [];
-      let sstHistory = JSON.parse(localStorage.getItem('sstHistory')) || [];
-      
-      const searchQuery = document.getElementById('history-search').value.toLowerCase();
-      
-      ttsHistory.forEach(item => {
-        if(item.text.toLowerCase().includes(searchQuery) || item.timestamp.toLowerCase().includes(searchQuery)) {
+    function updateHistory(){
+      const ttsList = document.getElementById('tts-history-list');
+      const sstList = document.getElementById('sst-history-list');
+      ttsList.innerHTML='';
+      sstList.innerHTML='';
+      const ttsHistory = JSON.parse(localStorage.getItem('ttsHistory'))||[];
+      const sstHistory = JSON.parse(localStorage.getItem('sstHistory'))||[];
+      const searchVal = document.getElementById('history-search').value.toLowerCase();
+      ttsHistory.forEach(item=>{
+        if(item.text.toLowerCase().includes(searchVal) || item.timestamp.toLowerCase().includes(searchVal)){
           const li = document.createElement('li');
           li.textContent = `${item.timestamp}: ${item.text}`;
-          ttsHistoryList.appendChild(li);
+          ttsList.appendChild(li);
         }
       });
-      
-      sstHistory.forEach(item => {
-        if(item.text.toLowerCase().includes(searchQuery) || item.timestamp.toLowerCase().includes(searchQuery)) {
+      sstHistory.forEach(item=>{
+        if(item.text.toLowerCase().includes(searchVal) || item.timestamp.toLowerCase().includes(searchVal)){
           const li = document.createElement('li');
           li.textContent = `${item.timestamp}: ${item.text}`;
-          sstHistoryList.appendChild(li);
+          sstList.appendChild(li);
         }
       });
     }
     updateHistory();
     
-    document.getElementById('clear-tts-history').addEventListener('click', () => {
-      localStorage.removeItem('ttsHistory');
-      updateHistory();
-    });
-    document.getElementById('clear-sst-history').addEventListener('click', () => {
-      localStorage.removeItem('sstHistory');
-      updateHistory();
-    });
-    document.getElementById('clear-all-history').addEventListener('click', () => {
-      localStorage.removeItem('ttsHistory');
-      localStorage.removeItem('sstHistory');
-      updateHistory();
-    });
     document.getElementById('history-search').addEventListener('input', updateHistory);
-    
-    document.getElementById('download-history').addEventListener('click', () => {
-      const ttsHistory = JSON.parse(localStorage.getItem('ttsHistory')) || [];
-      const sstHistory = JSON.parse(localStorage.getItem('sstHistory')) || [];
+    document.getElementById('clear-tts-history').addEventListener('click', ()=>{
+      localStorage.removeItem('ttsHistory');
+      updateHistory();
+    });
+    document.getElementById('clear-sst-history').addEventListener('click', ()=>{
+      localStorage.removeItem('sstHistory');
+      updateHistory();
+    });
+    document.getElementById('clear-all-history').addEventListener('click', ()=>{
+      localStorage.removeItem('ttsHistory');
+      localStorage.removeItem('sstHistory');
+      updateHistory();
+    });
+    document.getElementById('download-history').addEventListener('click', ()=>{
+      const ttsHistory = JSON.parse(localStorage.getItem('ttsHistory'))||[];
+      const sstHistory = JSON.parse(localStorage.getItem('sstHistory'))||[];
       const allHistory = { ttsHistory, sstHistory };
-      const blob = new Blob([JSON.stringify(allHistory, null, 2)], {type: 'application/json'});
+      const blob = new Blob([JSON.stringify(allHistory,null,2)], {type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -848,36 +837,31 @@
       URL.revokeObjectURL(url);
     });
     
-    /********** Navigation Tabs **********/
+    // Navigation
     const tabTTS = document.getElementById('tab-tts');
     const tabSST = document.getElementById('tab-sst');
     const tabHistory = document.getElementById('tab-history');
-    const sections = {
-      tts: document.getElementById('tts-section'),
-      sst: document.getElementById('sst-section'),
-      history: document.getElementById('history-section')
-    };
+    const tabAbout = document.getElementById('tab-about');
     
-    tabTTS.addEventListener('click', () => { setActiveTab('tts'); });
-    tabSST.addEventListener('click', () => { setActiveTab('sst'); });
-    tabHistory.addEventListener('click', () => { setActiveTab('history'); });
+    const ttsSection = document.getElementById('tts-section');
+    const sstSection = document.getElementById('sst-section');
+    const historySection = document.getElementById('history-section');
+    const aboutSection = document.getElementById('about-section');
     
-    function setActiveTab(tab) {
-      [tabTTS, tabSST, tabHistory].forEach(btn => btn.classList.remove('active'));
-      Object.values(sections).forEach(sec => sec.classList.remove('active'));
-      if (tab === 'tts') {
-        tabTTS.classList.add('active');
-        sections.tts.classList.add('active');
-      } else if (tab === 'sst') {
-        tabSST.classList.add('active');
-        sections.sst.classList.add('active');
-      } else if (tab === 'history') {
-        tabHistory.classList.add('active');
-        sections.history.classList.add('active');
-      }
+    function setActiveTab(tab){
+      [tabTTS, tabSST, tabHistory, tabAbout].forEach(btn=>btn.classList.remove('active'));
+      [ttsSection, sstSection, historySection, aboutSection].forEach(sec=>sec.classList.remove('active'));
+      if(tab==='tts'){ tabTTS.classList.add('active'); ttsSection.classList.add('active'); }
+      else if(tab==='sst'){ tabSST.classList.add('active'); sstSection.classList.add('active'); }
+      else if(tab==='history'){ tabHistory.classList.add('active'); historySection.classList.add('active'); }
+      else if(tab==='about'){ tabAbout.classList.add('active'); aboutSection.classList.add('active'); }
     }
+    tabTTS.addEventListener('click', ()=> setActiveTab('tts'));
+    tabSST.addEventListener('click', ()=> setActiveTab('sst'));
+    tabHistory.addEventListener('click', ()=> setActiveTab('history'));
+    tabAbout.addEventListener('click', ()=> setActiveTab('about'));
     
-    /********** Settings Modal (Bottom Left) **********/
+    // Settings
     const settingsBtn = document.getElementById('settings-btn');
     const settingsModal = document.getElementById('settings-modal');
     const darkModeToggle = document.getElementById('dark-mode-toggle');
@@ -886,53 +870,44 @@
     const fontSizeDisplay = document.getElementById('font-size-display');
     const fontFamilySelect = document.getElementById('font-family-select');
     
-    settingsBtn.addEventListener('click', () => {
-      settingsModal.style.display = settingsModal.style.display === "block" ? "none" : "block";
+    settingsBtn.addEventListener('click', ()=>{
+      settingsModal.style.display = (settingsModal.style.display==="block"? "none":"block");
     });
-    
-    function loadSettings() {
-      const dark = localStorage.getItem('darkMode') === 'true';
+    function loadSettings(){
+      const dark = localStorage.getItem('darkMode')==='true';
       darkModeToggle.checked = dark;
       updateDarkMode(dark);
       
-      const fontSize = localStorage.getItem('fontSize') || "16";
-      fontSizeInput.value = fontSize;
-      fontSizeDisplay.textContent = fontSize + "px";
-      document.body.style.fontSize = fontSize + "px";
+      const fs = localStorage.getItem('fontSize')||"16";
+      fontSizeInput.value = fs;
+      fontSizeDisplay.textContent = fs+"px";
+      document.body.style.fontSize = fs+"px";
       
-      const fontFamily = localStorage.getItem('fontFamily') || "'Roboto', sans-serif";
-      fontFamilySelect.value = fontFamily;
-      document.body.style.fontFamily = fontFamily;
+      const ff = localStorage.getItem('fontFamily')||"'Roboto', sans-serif";
+      fontFamilySelect.value = ff;
+      document.body.style.fontFamily = ff;
     }
     loadSettings();
-    
-    darkModeToggle.addEventListener('change', () => {
+    darkModeToggle.addEventListener('change', ()=>{
       updateDarkMode(darkModeToggle.checked);
       localStorage.setItem('darkMode', darkModeToggle.checked);
     });
-    
-    function updateDarkMode(enabled) {
-      if (enabled) {
-        document.body.classList.add('dark-mode');
-      } else {
-        document.body.classList.remove('dark-mode');
-      }
+    function updateDarkMode(enabled){
+      if(enabled) document.body.classList.add('dark-mode');
+      else document.body.classList.remove('dark-mode');
     }
-    
-    fontSizeInput.addEventListener('input', () => {
-      const size = fontSizeInput.value;
-      fontSizeDisplay.textContent = size + "px";
-      document.body.style.fontSize = size + "px";
-      localStorage.setItem('fontSize', size);
+    fontSizeInput.addEventListener('input', ()=>{
+      const val = fontSizeInput.value;
+      fontSizeDisplay.textContent = val+"px";
+      document.body.style.fontSize = val+"px";
+      localStorage.setItem('fontSize', val);
     });
-    
-    fontFamilySelect.addEventListener('change', () => {
-      const family = fontFamilySelect.value;
-      document.body.style.fontFamily = family;
-      localStorage.setItem('fontFamily', family);
+    fontFamilySelect.addEventListener('change', ()=>{
+      const val = fontFamilySelect.value;
+      document.body.style.fontFamily = val;
+      localStorage.setItem('fontFamily', val);
     });
-    
-    resetSettingsBtn.addEventListener('click', () => {
+    resetSettingsBtn.addEventListener('click', ()=>{
       localStorage.removeItem('darkMode');
       localStorage.removeItem('fontSize');
       localStorage.removeItem('fontFamily');
@@ -948,5 +923,3 @@
   </script>
 </body>
 </html>
-
-
