@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate TTS, SST & Translation App</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet" />
+  <style>
+    /* Base & Background */
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+      color: #333;
+      transition: background 0.3s, color 0.3s, font-size 0.3s, font-family 0.3s;
+      font-size: 16px;
+    }
+    body.dark-mode {
+      background: #1e1e2f;
+      color: #ddd;
+    }
+    header {
+      background: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background 0.3s;
+    }
+    body.dark-mode header {
+      background: #333;
+    }
+    header h1 {
+      margin: 0;
+      color: #5563de;
+    }
+    nav {
+      background: #333;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    nav ul li {
+      margin: 0;
+    }
+    nav ul li button {
+      background: #444;
+      border: none;
+      color: #fff;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+    nav ul li button:hover,
+    nav ul li button.active {
+      background: #5563de;
+    }
+    main {
+      max-width: 1000px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+    body.dark-mode main {
+      background: #2e2e42;
+    }
+    section {
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    h2 {
+      color: #5563de;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #5563de;
+      padding-bottom: 5px;
+    }
+    .controls, .translation-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+      font-size: inherit;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode textarea {
+      background: #444;
+      color: #ddd;
+      border: 1px solid #555;
+    }
+    /* Button Styles */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: #28a745;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .btn-secondary {
+      background: #007bff;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    /* Unified Searchable Language Input using datalist */
+    .lang-dropdown {
+      position: relative;
+      display: inline-block;
+      width: 200px;
+    }
+    .lang-dropdown input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    /* History Section Enhancements */
+    #history-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    #history-controls input {
+      padding: 5px;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    #history-section ul {
+      list-style: none;
+      padding: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    #history-section li {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.9em;
+    }
+    #history-section li:last-child {
+      border-bottom: none;
+    }
+    /* Settings Button (Gear Icon) */
+    #settings-btn {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      background: #444;
+      border: none;
+      color: #fff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.3s;
+      z-index: 200;
+    }
+    #settings-btn:hover {
+      background: #5563de;
+    }
+    /* Settings Modal */
+    #settings-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      left: 15px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 210;
+      width: 250px;
+    }
+    body.dark-mode #settings-modal {
+      background: #333;
+      color: #ddd;
+    }
+    #settings-modal label {
+      margin-right: 5px;
+    }
+    #settings-modal input[type="checkbox"] {
+      transform: scale(1.5);
+      margin-left: 5px;
+    }
+    #settings-modal .control-group {
+      margin-bottom: 10px;
+    }
+    #settings-modal .btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+    /* Fancy Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #333;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ultimate TTS, SST & Translation App</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><button id="tab-tts" class="active">TTS</button></li>
+      <li><button id="tab-sst">SST</button></li>
+      <li><button id="tab-history">History</button></li>
+    </ul>
+  </nav>
+  <main>
+    <!-- TTS Section -->
+    <section id="tts-section" class="active">
+      <h2>Text-to-Speech (TTS)</h2>
+      <textarea id="tts-text" placeholder="Enter text to speak..."></textarea>
+      <div class="controls">
+        <button id="speak-btn" class="btn btn-primary">Speak</button>
+        <button id="stop-btn" class="btn btn-danger">Stop</button>
+        <!-- Unified Voice Dropdown -->
+        <div class="lang-dropdown">
+          <input type="text" id="voice-input" placeholder="Select voice" list="voice-datalist" />
+          <datalist id="voice-datalist"></datalist>
+        </div>
+        <div class="control-group">
+          <label for="rate">Rate: <span id="rate-value">1</span></label>
+          <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1" />
+        </div>
+        <div class="control-group">
+          <label for="pitch">Pitch: <span id="pitch-value">1</span></label>
+          <input type="range" id="pitch" min="0" max="2" value="1" step="0.1" />
+        </div>
+        <div class="control-group">
+          <label for="volume">Volume: <span id="volume-value">1</span></label>
+          <input type="range" id="volume" min="0" max="1" value="1" step="0.1" />
+        </div>
+        <button id="copy-btn" class="btn btn-secondary">Copy</button>
+        <button id="paste-btn" class="btn btn-secondary">Paste</button>
+      </div>
+      
+      <!-- TTS Translation -->
+      <div class="translation-group">
+        <h2>Translate TTS Text</h2>
+        <div class="controls">
+          <!-- Source Language (e.g., EN) -->
+          <div class="lang-dropdown">
+            <input type="text" id="tts-src-input" placeholder="From (e.g., EN)" list="tts-src-datalist" />
+            <datalist id="tts-src-datalist"></datalist>
+          </div>
+          <!-- Target Language (e.g., IT) -->
+          <div class="lang-dropdown">
+            <input type="text" id="tts-tgt-input" placeholder="To (e.g., IT)" list="tts-tgt-datalist" />
+            <datalist id="tts-tgt-datalist"></datalist>
+          </div>
+          <button id="translate-tts-btn" class="btn btn-primary">Translate</button>
+        </div>
+        <textarea id="tts-translated-text" placeholder="Translated text will appear here..." readonly></textarea>
+        <button id="speak-translated-btn" class="btn btn-primary">Speak Translated</button>
+      </div>
+    </section>
+    
+    <!-- SST Section -->
+    <section id="sst-section">
+      <h2>Speech-to-Text (SST)</h2>
+      <div class="controls">
+        <!-- Recognition Language Dropdown (e.g., KN for Kannada) -->
+        <div class="lang-dropdown">
+          <input type="text" id="recog-input" placeholder="Recognition language (e.g., KN)" list="recog-datalist" />
+          <datalist id="recog-datalist"></datalist>
+        </div>
+        <button id="start-btn" class="btn btn-primary">Start Recognition</button>
+        <button id="stop-rec-btn" class="btn btn-danger">Stop Recognition</button>
+        <button id="save-sst-btn" class="btn btn-secondary">Save Transcript</button>
+        <button id="clear-btn" class="btn btn-secondary">Clear</button>
+      </div>
+      <textarea id="sst-text" placeholder="Speech will be transcribed here..." readonly></textarea>
+      
+      <!-- SST Translation -->
+      <div class="translation-group">
+        <h2>Translate SST Text</h2>
+        <div class="controls">
+          <!-- Source Language (e.g., EN) -->
+          <div class="lang-dropdown">
+            <input type="text" id="sst-src-input" placeholder="From (e.g., EN)" list="sst-src-datalist" />
+            <datalist id="sst-src-datalist"></datalist>
+          </div>
+          <!-- Target Language (e.g., IT) -->
+          <div class="lang-dropdown">
+            <input type="text" id="sst-tgt-input" placeholder="To (e.g., IT)" list="sst-tgt-datalist" />
+            <datalist id="sst-tgt-datalist"></datalist>
+          </div>
+          <button id="translate-sst-btn" class="btn btn-primary">Translate</button>
+        </div>
+        <textarea id="sst-translated-text" placeholder="Translated text will appear here..." readonly></textarea>
+        <button id="speak-sst-translated-btn" class="btn btn-primary">Speak Translated</button>
+      </div>
+    </section>
+    
+    <!-- History Section -->
+    <section id="history-section">
+      <h2>History</h2>
+      <div id="history-controls">
+        <input type="text" id="history-search" placeholder="Search history..." />
+        <button id="download-history" class="btn btn-secondary">Download History</button>
+        <button id="clear-all-history" class="btn btn-danger">Clear All History</button>
+      </div>
+      <div id="tts-history">
+        <h3>TTS History</h3>
+        <ul id="tts-history-list"></ul>
+        <button id="clear-tts-history" class="btn btn-danger">Clear TTS History</button>
+      </div>
+      <div id="sst-history" style="margin-top:20px;">
+        <h3>SST History</h3>
+        <ul id="sst-history-list"></ul>
+        <button id="clear-sst-history" class="btn btn-danger">Clear SST History</button>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Settings Button & Modal (Fixed at Bottom Left) -->
+  <button id="settings-btn" title="Settings">⚙️</button>
+  <div id="settings-modal">
+    <h3>Settings</h3>
+    <div class="control-group">
+      <label for="dark-mode-toggle">Dark Mode:</label>
+      <input type="checkbox" id="dark-mode-toggle" />
+    </div>
+    <div class="control-group">
+      <label for="font-size-input">Font Size:</label>
+      <input type="range" id="font-size-input" min="12" max="32" value="16" />
+      <span id="font-size-display">16px</span>
+    </div>
+    <div class="control-group">
+      <label for="font-family-select">Font Family:</label>
+      <select id="font-family-select">
+        <option value="'Roboto', sans-serif">Roboto</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="'Times New Roman', serif">Times New Roman</option>
+        <option value="'Courier New', monospace">Courier New</option>
+      </select>
+    </div>
+    <button id="reset-settings-btn" class="btn btn-danger">Reset Settings</button>
+  </div>
+  
+  <footer>
+    🤖All rights reserved to Mithun🤖
+  </footer>
+  
+  <script>
+    /********** Language Data & Utilities **********/
+    const languages = [
+      { code: 'af', name: 'Afrikaans' },
+      { code: 'sq', name: 'Albanian' },
+      { code: 'am', name: 'Amharic' },
+      { code: 'ar', name: 'Arabic' },
+      { code: 'hy', name: 'Armenian' },
+      { code: 'az', name: 'Azerbaijani' },
+      { code: 'eu', name: 'Basque' },
+      { code: 'be', name: 'Belarusian' },
+      { code: 'bn', name: 'Bengali' },
+      { code: 'bs', name: 'Bosnian' },
+      { code: 'bg', name: 'Bulgarian' },
+      { code: 'ca', name: 'Catalan' },
+      { code: 'ceb', name: 'Cebuano' },
+      { code: 'zh-CN', name: 'Chinese (Simplified)' },
+      { code: 'zh-TW', name: 'Chinese (Traditional)' },
+      { code: 'co', name: 'Corsican' },
+      { code: 'hr', name: 'Croatian' },
+      { code: 'cs', name: 'Czech' },
+      { code: 'da', name: 'Danish' },
+      { code: 'nl', name: 'Dutch' },
+      { code: 'en', name: 'English', recog: 'en-US' },
+      { code: 'eo', name: 'Esperanto' },
+      { code: 'et', name: 'Estonian' },
+      { code: 'fi', name: 'Finnish' },
+      { code: 'fr', name: 'French' },
+      { code: 'fy', name: 'Frisian' },
+      { code: 'gl', name: 'Galician' },
+      { code: 'ka', name: 'Georgian' },
+      { code: 'de', name: 'German' },
+      { code: 'el', name: 'Greek' },
+      { code: 'gu', name: 'Gujarati' },
+      { code: 'ht', name: 'Haitian Creole' },
+      { code: 'ha', name: 'Hausa' },
+      { code: 'haw', name: 'Hawaiian' },
+      { code: 'he', name: 'Hebrew' },
+      { code: 'hi', name: 'Hindi' },
+      { code: 'hmn', name: 'Hmong' },
+      { code: 'hu', name: 'Hungarian' },
+      { code: 'is', name: 'Icelandic' },
+      { code: 'ig', name: 'Igbo' },
+      { code: 'id', name: 'Indonesian' },
+      { code: 'ga', name: 'Irish' },
+      { code: 'it', name: 'Italian' },
+      { code: 'ja', name: 'Japanese' },
+      { code: 'jw', name: 'Javanese' },
+      { code: 'kn', name: 'Kannada', recog: 'kn-IN' },
+      { code: 'kk', name: 'Kazakh' },
+      { code: 'km', name: 'Khmer' },
+      { code: 'ko', name: 'Korean' },
+      { code: 'ku', name: 'Kurdish (Kurmanji)' },
+      { code: 'ky', name: 'Kyrgyz' },
+      { code: 'lo', name: 'Lao' },
+      { code: 'la', name: 'Latin' },
+      { code: 'lv', name: 'Latvian' },
+      { code: 'lt', name: 'Lithuanian' },
+      { code: 'lb', name: 'Luxembourgish' },
+      { code: 'mk', name: 'Macedonian' },
+      { code: 'mg', name: 'Malagasy' },
+      { code: 'ms', name: 'Malay' },
+      { code: 'ml', name: 'Malayalam' },
+      { code: 'mt', name: 'Maltese' },
+      { code: 'mi', name: 'Maori' },
+      { code: 'mr', name: 'Marathi' },
+      { code: 'mn', name: 'Mongolian' },
+      { code: 'my', name: 'Myanmar (Burmese)' },
+      { code: 'ne', name: 'Nepali' },
+      { code: 'no', name: 'Norwegian' },
+      { code: 'ny', name: 'Nyanja (Chichewa)' },
+      { code: 'or', name: 'Odia (Oriya)' },
+      { code: 'ps', name: 'Pashto' },
+      { code: 'fa', name: 'Persian' },
+      { code: 'pl', name: 'Polish' },
+      { code: 'pt', name: 'Portuguese' },
+      { code: 'pa', name: 'Punjabi' },
+      { code: 'ro', name: 'Romanian' },
+      { code: 'ru', name: 'Russian' },
+      { code: 'sm', name: 'Samoan' },
+      { code: 'gd', name: 'Scots Gaelic' },
+      { code: 'sr', name: 'Serbian' },
+      { code: 'st', name: 'Sesotho' },
+      { code: 'sn', name: 'Shona' },
+      { code: 'sd', name: 'Sindhi' },
+      { code: 'si', name: 'Sinhala (Sinhalese)' },
+      { code: 'sk', name: 'Slovak' },
+      { code: 'sl', name: 'Slovenian' },
+      { code: 'so', name: 'Somali' },
+      { code: 'es', name: 'Spanish' },
+      { code: 'su', name: 'Sundanese' },
+      { code: 'sw', name: 'Swahili' },
+      { code: 'sv', name: 'Swedish' },
+      { code: 'tl', name: 'Tagalog (Filipino)' },
+      { code: 'tg', name: 'Tajik' },
+      { code: 'ta', name: 'Tamil' },
+      { code: 'te', name: 'Telugu' },
+      { code: 'th', name: 'Thai' },
+      { code: 'tr', name: 'Turkish' },
+      { code: 'uk', name: 'Ukrainian' },
+      { code: 'ur', name: 'Urdu' },
+      { code: 'uz', name: 'Uzbek' },
+      { code: 'vi', name: 'Vietnamese' },
+      { code: 'cy', name: 'Welsh' },
+      { code: 'xh', name: 'Xhosa' },
+      { code: 'yi', name: 'Yiddish' },
+      { code: 'yo', name: 'Yoruba' },
+      { code: 'zu', name: 'Zulu' }
+    ];
+    
+    // Populate datalists for input fields
+    function populateDatalist(inputId, datalistId) {
+      const datalist = document.getElementById(datalistId);
+      datalist.innerHTML = '';
+      languages.forEach(lang => {
+        if(lang.code === "auto") return;
+        const option = document.createElement('option');
+        option.value = `${lang.name}|${lang.code}`;
+        datalist.appendChild(option);
+      });
+    }
+    populateDatalist('tts-src-input', 'tts-src-datalist');
+    populateDatalist('tts-tgt-input', 'tts-tgt-datalist');
+    populateDatalist('sst-src-input', 'sst-src-datalist');
+    populateDatalist('sst-tgt-input', 'sst-tgt-datalist');
+    populateDatalist('recog-input', 'recog-datalist');
+    
+    // Extract the language code from an input's value "Name|code"
+    function getLangCode(inputElem) {
+      const val = inputElem.value;
+      if(!val.includes("|")) return "";
+      return val.split("|")[1].trim();
+    }
+    
+    /********** Local & Fallback TTS Logic **********/
+    let synth = window.speechSynthesis;
+    let voices = [];
+    
+    function populateVoices() {
+      voices = synth.getVoices();
+      const datalist = document.getElementById('voice-datalist');
+      datalist.innerHTML = '';
+      voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = `${voice.name} (${voice.lang})|${index}`;
+        datalist.appendChild(option);
+      });
+    }
+    populateVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
+    
+    // Fallback TTS with Google Translate
+    async function fallbackSpeak(text, lang) {
+      // Example: "ta" for Tamil, "te" for Telugu, "kn" for Kannada, etc.
+      // This is an unofficial usage of Google TTS.
+      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang}&q=${encodeURIComponent(text)}`;
+      const audio = new Audio(ttsUrl);
+      try {
+        await audio.play();
+      } catch (err) {
+        console.error("Fallback TTS error:", err);
+        alert("Could not play fallback TTS audio. Try a different browser or check your settings.");
+      }
+    }
+    
+    // First try to find a local voice that starts or includes the target code
+    function getVoiceForLanguage(langCode) {
+      if (!langCode) return null;
+      langCode = langCode.toLowerCase();
+      // 1) exact startsWith
+      for (let i = 0; i < voices.length; i++) {
+        if (voices[i].lang.toLowerCase().startsWith(langCode)) {
+          return voices[i];
+        }
+      }
+      // 2) partial includes
+      for (let i = 0; i < voices.length; i++) {
+        if (voices[i].lang.toLowerCase().includes(langCode)) {
+          return voices[i];
+        }
+      }
+      return null;
+    }
+    
+    // A universal function to speak any text in any language, 
+    // using local voice if available, else fallback TTS
+    function speakAnyLanguage(text, langCode, rateVal, pitchVal, volumeVal) {
+      if (!text.trim()) return;
+      const chosenVoice = getVoiceForLanguage(langCode);
+      if (!chosenVoice) {
+        // fallback
+        fallbackSpeak(text, langCode);
+      } else {
+        // local speechSynthesis
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = chosenVoice;
+        utterance.rate = rateVal;
+        utterance.pitch = pitchVal;
+        utterance.volume = volumeVal;
+        synth.speak(utterance);
+      }
+    }
+    
+    /********** TTS Section **********/
+    const ttsText = document.getElementById('tts-text');
+    const speakBtn = document.getElementById('speak-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const voiceInput = document.getElementById('voice-input');
+    const rate = document.getElementById('rate');
+    const pitch = document.getElementById('pitch');
+    const volume = document.getElementById('volume');
+    const rateValue = document.getElementById('rate-value');
+    const pitchValue = document.getElementById('pitch-value');
+    const volumeValue = document.getElementById('volume-value');
+    
+    speakBtn.addEventListener('click', () => {
+      if (synth.speaking) return;
+      const text = ttsText.value.trim();
+      if (!text) return;
+      addHistory('tts', text);
+      // Determine the chosen voice from the dropdown
+      let voiceIndex = voiceInput.value.split("|")[1];
+      if (voiceIndex === undefined) voiceIndex = 0;
+      const chosenVoice = voices[voiceIndex];
+      if (!chosenVoice) {
+        // fallback - we have no local voice selected
+        // let's guess the text is in English or let user do any language
+        fallbackSpeak(text, "en");
+      } else {
+        // speak with local voice
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = chosenVoice;
+        utterance.rate = rate.value;
+        utterance.pitch = pitch.value;
+        utterance.volume = volume.value;
+        synth.speak(utterance);
+      }
+    });
+    
+    stopBtn.addEventListener('click', () => {
+      if (synth.speaking) synth.cancel();
+    });
+    rate.addEventListener('input', () => { rateValue.textContent = rate.value; });
+    pitch.addEventListener('input', () => { pitchValue.textContent = pitch.value; });
+    volume.addEventListener('input', () => { volumeValue.textContent = volume.value; });
+    
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      ttsText.select();
+      document.execCommand('copy');
+    });
+    document.getElementById('paste-btn').addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        ttsText.value = text;
+      } catch (err) {
+        console.error('Clipboard error:', err);
+      }
+    });
+    
+    // TTS Translation
+    const translateTtsBtn = document.getElementById('translate-tts-btn');
+    const ttsTranslatedText = document.getElementById('tts-translated-text');
+    const speakTranslatedBtn = document.getElementById('speak-translated-btn');
+    const ttsSrcInput = document.getElementById('tts-src-input');
+    const ttsTgtInput = document.getElementById('tts-tgt-input');
+    
+    translateTtsBtn.addEventListener('click', () => {
+      const text = ttsText.value.trim();
+      if (!text) { alert('Enter text to translate.'); return; }
+      let sourceCode = getLangCode(ttsSrcInput);
+      if (!sourceCode) sourceCode = "en";
+      const targetCode = getLangCode(ttsTgtInput) || "en";
+      ttsTranslatedText.value = "Translating...";
+      translateText(text, sourceCode, targetCode, (translated) => {
+        ttsTranslatedText.value = translated;
+      });
+    });
+    
+    speakTranslatedBtn.addEventListener('click', () => {
+      if (synth.speaking) return;
+      const text = ttsTranslatedText.value.trim();
+      if (!text) return;
+      const targetCode = getLangCode(ttsTgtInput) || "en";
+      speakAnyLanguage(text, targetCode, rate.value, pitch.value, volume.value);
+    });
+    
+    /********** MyMemory Translation Function **********/
+    function translateText(text, source, target, callback) {
+      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${target}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.responseData) {
+            callback(data.responseData.translatedText);
+          } else {
+            callback('Translation error.');
+          }
+        })
+        .catch(err => {
+          console.error('Translation API error:', err);
+          callback('Translation error.');
+        });
+    }
+    
+    /********** SST Setup **********/
+    const sstText = document.getElementById('sst-text');
+    const startBtn = document.getElementById('start-btn');
+    const stopRecBtn = document.getElementById('stop-rec-btn');
+    const saveSstBtn = document.getElementById('save-sst-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    let recognition;
+    let recognizing = false;
+    
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Your browser does not support Speech Recognition.');
+    } else {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      
+      recognition.onstart = () => { recognizing = true; };
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        sstText.value = transcript;
+      };
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+      recognition.onend = () => { recognizing = false; };
+    }
+    
+    startBtn.addEventListener('click', () => {
+      if (recognition && !recognizing) {
+        const recogCode = getLangCode(document.getElementById('recog-input')) || "en";
+        const recogMapping = { en: "en-US", kn: "kn-IN" };
+        recognition.lang = recogMapping[recogCode.toLowerCase()] || recogCode;
+        recognition.start();
+      }
+    });
+    
+    stopRecBtn.addEventListener('click', () => {
+      if (recognition && recognizing) {
+        recognition.stop();
+      }
+    });
+    clearBtn.addEventListener('click', () => { sstText.value = ''; });
+    
+    saveSstBtn.addEventListener('click', () => {
+      const text = sstText.value.trim();
+      if (!text) { alert('No transcript to save.'); return; }
+      addHistory('sst', text);
+      alert('Transcript saved.');
+    });
+    
+    // SST Translation
+    const translateSstBtn = document.getElementById('translate-sst-btn');
+    const sstTranslatedText = document.getElementById('sst-translated-text');
+    const speakSstTranslatedBtn = document.getElementById('speak-sst-translated-btn');
+    const sstSrcInput = document.getElementById('sst-src-input');
+    const sstTgtInput = document.getElementById('sst-tgt-input');
+    
+    translateSstBtn.addEventListener('click', () => {
+      const text = sstText.value.trim();
+      if (!text) { alert('No transcript to translate.'); return; }
+      let sourceCode = getLangCode(sstSrcInput);
+      if (!sourceCode) sourceCode = "en";
+      const targetCode = getLangCode(sstTgtInput) || "en";
+      sstTranslatedText.value = "Translating...";
+      translateText(text, sourceCode, targetCode, (translated) => {
+        sstTranslatedText.value = translated;
+      });
+    });
+    
+    speakSstTranslatedBtn.addEventListener('click', () => {
+      if (synth.speaking) return;
+      const text = sstTranslatedText.value.trim();
+      if (!text) return;
+      const targetCode = getLangCode(sstTgtInput) || "en";
+      speakAnyLanguage(text, targetCode, rate.value, pitch.value, volume.value);
+    });
+    
+    /********** History Functions **********/
+    function addHistory(type, text) {
+      const key = type === 'tts' ? 'ttsHistory' : 'sstHistory';
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      history.push({ text: text, timestamp: new Date().toLocaleString() });
+      localStorage.setItem(key, JSON.stringify(history));
+      updateHistory();
+    }
+    
+    function updateHistory() {
+      const ttsHistoryList = document.getElementById('tts-history-list');
+      const sstHistoryList = document.getElementById('sst-history-list');
+      ttsHistoryList.innerHTML = '';
+      sstHistoryList.innerHTML = '';
+      
+      let ttsHistory = JSON.parse(localStorage.getItem('ttsHistory')) || [];
+      let sstHistory = JSON.parse(localStorage.getItem('sstHistory')) || [];
+      
+      const searchQuery = document.getElementById('history-search').value.toLowerCase();
+      
+      ttsHistory.forEach(item => {
+        if(item.text.toLowerCase().includes(searchQuery) || item.timestamp.toLowerCase().includes(searchQuery)) {
+          const li = document.createElement('li');
+          li.textContent = `${item.timestamp}: ${item.text}`;
+          ttsHistoryList.appendChild(li);
+        }
+      });
+      
+      sstHistory.forEach(item => {
+        if(item.text.toLowerCase().includes(searchQuery) || item.timestamp.toLowerCase().includes(searchQuery)) {
+          const li = document.createElement('li');
+          li.textContent = `${item.timestamp}: ${item.text}`;
+          sstHistoryList.appendChild(li);
+        }
+      });
+    }
+    updateHistory();
+    
+    document.getElementById('clear-tts-history').addEventListener('click', () => {
+      localStorage.removeItem('ttsHistory');
+      updateHistory();
+    });
+    document.getElementById('clear-sst-history').addEventListener('click', () => {
+      localStorage.removeItem('sstHistory');
+      updateHistory();
+    });
+    document.getElementById('clear-all-history').addEventListener('click', () => {
+      localStorage.removeItem('ttsHistory');
+      localStorage.removeItem('sstHistory');
+      updateHistory();
+    });
+    document.getElementById('history-search').addEventListener('input', updateHistory);
+    
+    document.getElementById('download-history').addEventListener('click', () => {
+      const ttsHistory = JSON.parse(localStorage.getItem('ttsHistory')) || [];
+      const sstHistory = JSON.parse(localStorage.getItem('sstHistory')) || [];
+      const allHistory = { ttsHistory, sstHistory };
+      const blob = new Blob([JSON.stringify(allHistory, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'history.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+    
+    /********** Navigation Tabs **********/
+    const tabTTS = document.getElementById('tab-tts');
+    const tabSST = document.getElementById('tab-sst');
+    const tabHistory = document.getElementById('tab-history');
+    const sections = {
+      tts: document.getElementById('tts-section'),
+      sst: document.getElementById('sst-section'),
+      history: document.getElementById('history-section')
+    };
+    
+    tabTTS.addEventListener('click', () => { setActiveTab('tts'); });
+    tabSST.addEventListener('click', () => { setActiveTab('sst'); });
+    tabHistory.addEventListener('click', () => { setActiveTab('history'); });
+    
+    function setActiveTab(tab) {
+      [tabTTS, tabSST, tabHistory].forEach(btn => btn.classList.remove('active'));
+      Object.values(sections).forEach(sec => sec.classList.remove('active'));
+      if (tab === 'tts') {
+        tabTTS.classList.add('active');
+        sections.tts.classList.add('active');
+      } else if (tab === 'sst') {
+        tabSST.classList.add('active');
+        sections.sst.classList.add('active');
+      } else if (tab === 'history') {
+        tabHistory.classList.add('active');
+        sections.history.classList.add('active');
+      }
+    }
+    
+    /********** Settings Modal (Bottom Left) **********/
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const resetSettingsBtn = document.getElementById('reset-settings-btn');
+    const fontSizeInput = document.getElementById('font-size-input');
+    const fontSizeDisplay = document.getElementById('font-size-display');
+    const fontFamilySelect = document.getElementById('font-family-select');
+    
+    settingsBtn.addEventListener('click', () => {
+      settingsModal.style.display = settingsModal.style.display === "block" ? "none" : "block";
+    });
+    
+    function loadSettings() {
+      const dark = localStorage.getItem('darkMode') === 'true';
+      darkModeToggle.checked = dark;
+      updateDarkMode(dark);
+      
+      const fontSize = localStorage.getItem('fontSize') || "16";
+      fontSizeInput.value = fontSize;
+      fontSizeDisplay.textContent = fontSize + "px";
+      document.body.style.fontSize = fontSize + "px";
+      
+      const fontFamily = localStorage.getItem('fontFamily') || "'Roboto', sans-serif";
+      fontFamilySelect.value = fontFamily;
+      document.body.style.fontFamily = fontFamily;
+    }
+    loadSettings();
+    
+    darkModeToggle.addEventListener('change', () => {
+      updateDarkMode(darkModeToggle.checked);
+      localStorage.setItem('darkMode', darkModeToggle.checked);
+    });
+    
+    function updateDarkMode(enabled) {
+      if (enabled) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+    
+    fontSizeInput.addEventListener('input', () => {
+      const size = fontSizeInput.value;
+      fontSizeDisplay.textContent = size + "px";
+      document.body.style.fontSize = size + "px";
+      localStorage.setItem('fontSize', size);
+    });
+    
+    fontFamilySelect.addEventListener('change', () => {
+      const family = fontFamilySelect.value;
+      document.body.style.fontFamily = family;
+      localStorage.setItem('fontFamily', family);
+    });
+    
+    resetSettingsBtn.addEventListener('click', () => {
+      localStorage.removeItem('darkMode');
+      localStorage.removeItem('fontSize');
+      localStorage.removeItem('fontFamily');
+      darkModeToggle.checked = false;
+      updateDarkMode(false);
+      fontSizeInput.value = "16";
+      fontSizeDisplay.textContent = "16px";
+      document.body.style.fontSize = "16px";
+      fontFamilySelect.value = "'Roboto', sans-serif";
+      document.body.style.fontFamily = "'Roboto', sans-serif";
+      alert('Settings reset.');
+    });
+  </script>
+</body>
+</html>
